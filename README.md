@@ -1,7 +1,7 @@
 
-# SSH-Login
+# SSHLogin
 
-RemoteLogin is a small script that is designed to facilitate SSH login to remote hosts via a ***YAML file***. If the SSH login is set up via SSH keys, it can be more efficient to search for the connection each time and enter it into the terminal.
+SSHLogin is a small script that is designed to facilitate SSH login to remote hosts via a ***YAML file***. If the SSH login is set up via SSH keys, it can be more efficient to search for the connection each time and enter it into the terminal.
 ## Features
 To transfer X sessions over the SSH connection, the X option can be activated in the ***YAML file***.
 
