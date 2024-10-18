@@ -1,0 +1,17 @@
+login:
+  server:  
+    - name: "Server Apache2"                      # Meaningful name of the remote target
+      location: "Munich II"                       # Location of the remote target
+      description: "KVM-Host, RHEL"               # For example, installed services
+      ip: "192.168.10.100"                        # IP-Address
+      user: "username"                            # User who can log in.
+      port: "22"                                  # SSH-port
+      x-option: "yes"                             # "yes" if ssh should be given "-X", otherwise "no"
+    - name: ""
+      location: ""
+      description: ""
+      ip: ""
+      user: ""
+      port: ""
+      x-option: "no"                              # "yes" if ssh should be given "-X", otherwise "no"
+
