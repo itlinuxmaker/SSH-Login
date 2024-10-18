@@ -11,41 +11,76 @@ License: GNU General Public License v3.0 or later
 """
 
 def load_yaml_config(file_path):
+    """
+    Loads a YAML configuration file from the '~/Logins' directory.
+    
+    Args:
+        file_path (str): The filename of the YAML file.
+
+    Raises:
+        FileNotFoundError: If the '~/Logins' directory or the specified file does not exist.
+        ValueError: If the file is not a YAML file or there is an error parsing the file.
+
+    Returns:
+        dict: The loaded YAML data as a Python dictionary.
+    """
     logins_dir = os.path.expanduser("~/Logins")
     
     if not os.path.exists(logins_dir):
         raise FileNotFoundError(
-            "\033[0m\033[91mFehler: Das Verzeichnis 'Logins' im Home-Verzeichnis wurde nicht gefunden.\n\n"
-            "Legen Sie die YAML-Datei bitte im Verzeichnis 'Logins' Ihres Home-Verzeichnis ab.\n\033[0m"
+            "\033[0m\033[91mError: The directory 'Logins' in the home directory was not found.\n\n"
+            "Please place the YAML file in the 'Logins' directory of your home directory.\n\033[0m"
         )
     
     full_path = os.path.join(logins_dir, file_path)
     
     if not full_path.endswith(('.yaml', '.yml')):
-        raise ValueError("\033[0m\033[91mNur Dateien mit den Endungen '.yaml' oder '.yml' werden als YAML-Dateien akzeptiert.\033[0m")
+        raise ValueError("\033[0m\033[91mOnly files with the extension '.yaml' or '.yml' are accepted as YAML files.\033[0m")
     
     try:
         with open(full_path, 'r') as file:
             return yaml.safe_load(file)
     except FileNotFoundError:
-        raise FileNotFoundError(f"\033[0m\033[91mDie Datei '{file_path}' wurde nicht im Verzeichnis '{logins_dir}' gefunden.\033[0m")
+        raise FileNotFoundError(f"\033[0m\033[91mThe file '{file_path}' was not found in the directory '{logins_dir}'.\033[0m")
     except yaml.YAMLError as e:
-        raise ValueError(f"\033[0m\033[91mFehler beim Parsen der YAML-Datei: {e}\033[0m")
+        raise ValueError(f"\033[0m\033[91mError parsing YAML file: {e}\033[0m")
 
 def display_menu(servers):
+    """
+    Displays a menu for selecting a server.
+
+    Args:
+        servers (list): List of servers with their details stored in the YAML file.
+
+    Returns:
+        dict: The server dictionary selected by the user.
+
+    Raises:
+        ValueError: If the user input is not a valid number.
+    """
     print()
-    print(f"\033[1m\033[38;5;214m{'==============================': <50}")
-    print(f"{'SSH-Logins für folgende Server': >50}")
-    print(f"{'==============================': >50}\033[0m")
+    print(f"\033[1m\033[38;5;214m{'====================================': >50}")
+    print(f"{'SSH logins for the following servers': >50}")
+    print(f"{'====================================': >50}\033[0m")
     print()
     for i, server in enumerate(servers, start=1):
-        print(f"\033[1m\033[94m{server['name']: <70} {i}\033[0m\n\033[38;5;214mStandort:\033[0m {'': <5}{server['location']}\n\033[38;5;214mBeschreibung:\033[0m {'': <1}{server['description']}")
+        print(f"\033[1m\033[94m{server['name']: <70} {i}\033[0m\n\033[38;5;214mLocation:\033[0m {'': <5}{server['location']}\n\033[38;5;214mDescription:\033[0m {'': <1}{server['description']}")
         print()
-    choice = int(input("\n\033[38;5;230mBitte wählen Sie eine Zahl für den SSH-Login: \033[0m"))
+    choice = int(input("\n\033[38;5;230mPlease select a number for the SSH login: \033[0m"))
     print()
     return servers[choice - 1]
 
 def ssh_login(server):
+    """
+    Establishes an SSH connection to a selected server.
+
+    Args:
+        server (dict): The server details, including 'name', 'ip', 'port', 'user' and 'x-option'.
+
+    Raises:
+        subprocess.CalledProcessError: If the SSH command fails.
+        KeyboardInterrupt: When the user disconnects.
+    """
 
     command = ["ssh"]
 
@@ -59,20 +94,32 @@ def ssh_login(server):
     try:
         subprocess.run(command, check=True)
     except subprocess.CalledProcessError as e:
-        print(f"\033[0m\033[91mFehler beim Verbinden mit {server['name']}: {e}\033[0m")
+        print(f"\033[0m\033[91mError connecting to {server['name']}: {e}\033[0m")
     except KeyboardInterrupt:
         print()
-        print("\033[0m\033[91m\nAbbruch durch Benutzer.\033[0m")
+        print("\033[0m\033[91m\nCancellation by user.\033[0m")
         print()
 
 def info(name, ip, port):
+    """
+    Displays a message confirming that a connection to a specific server is being established.
+
+    Args:
+        name (str): The name of the SSH connection.
+        ip (str): The IP address of the SSH connection.
+        port (str): The SSH port of the SSH connection.
+    """
     print()
-    print(f"\033[1m\033[92mDie Verbindung zu '{name}' unter der IP-Adresse '{ip}' und dem SSH-Port '{port}' wird jetzt hergestellt.\033[0m")
+    print(f"\033[1m\033[92mConnecting to '{name}' at IP address '{ip}' and SSH port '{port}' is now established.\033[0m")
     print()
 
 
 def clear_console():
-    """Clears the console output based on the operating system."""
+    """
+    Clears the console based on the operating system.
+    
+    Works on both Linux/macOS (with 'clear') and Windows (with 'cls').
+    """
     if os.name == 'posix':  
         os.system('clear')
     elif os.name == 'nt':  
@@ -93,6 +140,6 @@ if __name__ == "__main__":
         ssh_login(server_choice)
     except KeyboardInterrupt:
         print()
-        print("\n\033[1m\033[91mAbbruch durch Benutzer.\033[0m")
+        print("\n\033[1m\033[91mCancellation by user.\033[0m")
         print()
         sys.exit(0)
