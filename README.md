@@ -43,12 +43,7 @@ Change to the project directory and follow these steps:
 ```
 vi ~/Logins/ssh_login.yaml 
 ```
-5. Run the backup script:
-```
-  python3 /usr/local/bin/remoteLogin.py
-  ```
 
-``
 ## License
 The program is licensed under the GNU General Public License v3.0 or later in 2024.
 
