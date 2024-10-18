@@ -64,7 +64,7 @@ def display_menu(servers):
     print(f"{'====================================': >50}\033[0m")
     print()
     for i, server in enumerate(servers, start=1):
-        print(f"\033[1m\033[94m{server['name']: <70} {i}\033[0m\n\033[38;5;214mLocation:\033[0m {'': <5}{server['location']}\n\033[38;5;214mDescription:\033[0m {'': <1}{server['description']}")
+        print(f"\033[1m\033[94m{server['name']: <70} {i}\033[0m\n\033[38;5;214mLocation:\033[0m {'': <4}{server['location']}\n\033[38;5;214mDescription:\033[0m {'': <1}{server['description']}")
         print()
     choice = int(input("\n\033[38;5;230mPlease select a number for the SSH login: \033[0m"))
     print()
